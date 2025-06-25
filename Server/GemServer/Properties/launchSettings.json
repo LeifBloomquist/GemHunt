@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GemServer": {
+      "commandName": "Project",
+      "commandLineArgs": "c:\\mazes\\cave100_4.txt"
+    }
+  }
+}
