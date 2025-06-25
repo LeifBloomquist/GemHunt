@@ -5,10 +5,7 @@ VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GemServer", "GemServer.csproj", "{3720120C-BB33-418A-A3A6-A2ABF5E1425B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GemClient", "GemClient", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		gemhunt.c = gemhunt.c
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GemClient", "..\..\Client\GemClient\GemClient.vcxproj", "{174AF38E-20C5-4E3F-B8C9-6B7D27D4CDF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +17,10 @@ Global
 		{3720120C-BB33-418A-A3A6-A2ABF5E1425B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3720120C-BB33-418A-A3A6-A2ABF5E1425B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3720120C-BB33-418A-A3A6-A2ABF5E1425B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{174AF38E-20C5-4E3F-B8C9-6B7D27D4CDF3}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{174AF38E-20C5-4E3F-B8C9-6B7D27D4CDF3}.Debug|Any CPU.Build.0 = Debug|x64
+		{174AF38E-20C5-4E3F-B8C9-6B7D27D4CDF3}.Release|Any CPU.ActiveCfg = Release|x64
+		{174AF38E-20C5-4E3F-B8C9-6B7D27D4CDF3}.Release|Any CPU.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
