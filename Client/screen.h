@@ -1,17 +1,19 @@
 // Screen constants and defines
 
 #if defined(__VIC20__)
-#define WINDOW_START 0x1E89
+#define WINDOW_START 0x1E8A
 #define WINDOW_LINE2 (WINDOW_START + 22 )
 #define WINDOW_LINE3 (WINDOW_START + 44 )
 #define WINDOW_LINE4 (WINDOW_START + 66 )
-#define WINDOW_LINE5 (WINDOW_START + 110)
-#define WINDOW_LINE6 (WINDOW_START + 132)
-#define WINDOW_LINE7 (WINDOW_START + 154)
-#define WINDOW_LINE8 (WINDOW_START + 176)
-#define WINDOW_LINE9 (WINDOW_START + 198)
+#define WINDOW_LINE5 (WINDOW_START + 88 )
+#define WINDOW_LINE6 (WINDOW_START + 110)
+#define WINDOW_LINE7 (WINDOW_START + 132)
+#define WINDOW_LINE8 (WINDOW_START + 154)
+#define WINDOW_LINE9 (WINDOW_START + 176)
 #define NETWORK_CHAR 0x1FF9
 #define NETWORK_CHAR_COLOUR 0x97F9
+#define SCREEN_WIDTH  22
+#define SCREEN_HEIGHT 23
 #endif
 
 #if defined(__C64__)
@@ -26,4 +28,14 @@
 #define WINDOW_LINE9 (WINDOW_START + 320)
 #define NETWORK_CHAR 0x07E7
 #define NETWORK_CHAR_COLOUR 0xDBE7
+#define SCREEN_WIDTH  40
+#define SCREEN_HEIGHT 25
 #endif
+
+#define CHAR_STATE1 126 // top-left
+#define CHAR_STATE2 124 // top-right
+#define CHAR_STATE3 108 // bottom-right
+#define CHAR_STATE4 123 // bottom-left
+#define CHAR_BORDER 160 // block
+#define CHAR_DIAGSE 205 // "\"
+#define CHAR_DIAGNE 206 // "/"
