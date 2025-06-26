@@ -9,21 +9,57 @@
 
 static byte send_buffer[SEND_BUFFER_SIZE];
 
-// Read the joystick and send actions
+int read_keyboard()
+{
+    byte c = 0;
+
+    if (kbhit())
+    {
+        c = cgetc();
+    }
+
+    if (c == 0) return 0;
+
+    switch (c)
+    {
+        case 'q': return 1;
+        case 'w': return 2;
+        case 'e': return 3;
+        case 'a': return 4;
+        case 'd': return 5;
+        case 'z': return 6;
+        case 'x': return 7;
+        case 'c': return 8;
+        case ' ': return 16;
+        default: return 0;
+    }
+}
+
+// Read the keyboard+joystick and send actions
 void read_input()
 {
     int bytes = 0;
-    byte j = 0;
+    byte m = 0;
 
     POKE(NETWORK_CHAR, CHAR_STATE1);  // Show state
 
-    j = read_joystick();
+    m = read_keyboard();
 
-    if (j != 0)
+    if (m == 0)
     {
-        send_buffer[0] = 1;
-        send_buffer[1] = (j & 0x0F);
-        send_buffer[2] = (j & 0x10);
+        m = read_joystick();
+    }
+
+    if (m == 0)
+    {
+        return;
+    }
+
+    if (m != 0)
+    {
+        send_buffer[0] = PACKET_MOVE;
+        send_buffer[1] = (m & 0x0F);
+        send_buffer[2] = (m & 0x10);
 
         POKE(NETWORK_CHAR, CHAR_STATE2);  // Show state
 

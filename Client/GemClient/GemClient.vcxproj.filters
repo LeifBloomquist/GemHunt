@@ -20,6 +20,12 @@
     <ClCompile Include="..\screen.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\input.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\make.cmd" />
@@ -32,6 +38,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\network.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,6 +10,9 @@
 #define BUFFER_SIZE 100
 #define SEND_BUFFER_SIZE 3
 
+#define PACKET_MOVE   1
+#define PACKET_UPDATE 128
+
 void connect_server();
 void read_network();
 

@@ -131,6 +131,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\gemhunt.c" />
+    <ClCompile Include="..\input.c" />
+    <ClCompile Include="..\network.c" />
     <ClCompile Include="..\screen.c" />
     <ClCompile Include="..\utils.c" />
   </ItemGroup>
@@ -138,6 +140,7 @@
     <None Include="..\make.cmd" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\input.h" />
     <ClInclude Include="..\network.h" />
     <ClInclude Include="..\screen.h" />
     <ClInclude Include="..\utils.h" />

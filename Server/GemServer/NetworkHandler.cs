@@ -6,7 +6,7 @@ namespace GemServer
     static internal class NetworkHandler
     {
         // Client to Server
-        public const byte MOVED = 1;
+        public const byte PACKET_MOVED = 1;
 
         // Possible Moves
         public const byte UP = 1;
@@ -51,7 +51,7 @@ namespace GemServer
             Thread.CurrentThread.Name = "Player Thread [" + id + "]";
 
             Player player = new(stream, id);
-            player.SetPosition (2,2);  // TODO Random
+            player.SetPosition(10, 10);
 
             while (client.Connected)
             {
@@ -61,10 +61,12 @@ namespace GemServer
 
                     if (bytes == 0) break;  // Socket shut down 
 
+                    Console.WriteLine("Received [" +bytes + "] bytes from client");
+
                     switch (buffer[0])
                     {
-                        case MOVED:
-                            ProcessMove(ref player, buffer[1]);
+                        case PACKET_MOVED:
+                            ProcessMove(ref player, buffer[1], buffer[2]);
                             break;
 
                         default:
@@ -78,8 +80,6 @@ namespace GemServer
                 if (delta >= UPDATE_PERIOD)
                 {
                     SendUpdate(player);
-                    player.x++;
-                    player.y++;
                 }
 
                 // Snooze
@@ -92,9 +92,25 @@ namespace GemServer
             Console.WriteLine("Client disconnected: [" + player.ID + "]");
         }
 
-        private static void ProcessMove(ref Player player, byte command)
+        private static void ProcessMove(ref Player player, byte move, byte action)
         {
+            switch (move)
+            {
+                case 1: player.x--; player.y--; break;
+                case 2:             player.y--; break;
+                case 3: player.x++; player.y--; break;
+                case 4: player.x--;             break;
+                case 5: player.x++;             break;
+                case 6: player.x--; player.y++; break;
+                case 7:             player.y++; break;
+                case 8: player.x++; player.y++; break;
+                default:
+                    Console.WriteLine("Unknown player move " + move);
+                    break;
+            }
+
             player.LastMoveTime = DateTime.Now;
+            SendUpdate(player);  // For immediate feedback
         }
 
         private static void SendUpdate(Player player)
@@ -109,7 +125,7 @@ namespace GemServer
             {
                 player.stream.Write(send_buffer);
             }
-                catch (System.IO.IOException io)    // Client disconnected
+                catch (System.IO.IOException)    // Client disconnected
             {
                 player.Disconnected = true;
                 return;
