@@ -1,5 +1,8 @@
 // Screen constants and defines
 
+#ifndef SCREEN_H
+#define SCREEN_H
+
 #if defined(__VIC20__)
 #define WINDOW_LINE1 0x1E8A
 #define WINDOW_LINE2 (WINDOW_LINE1 + 22 )
@@ -46,3 +49,5 @@
 
 // Prototypes
 void prepare_screen();
+
+#endif /* SCREEN_H */

@@ -1,3 +1,5 @@
+// Misc Utility Functions
+
 #ifndef UTILS_H
 #define UTILS_H
 
