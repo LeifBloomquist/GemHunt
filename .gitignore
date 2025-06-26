@@ -404,5 +404,3 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-Client/GemClient/GemClient.vcxproj
-Client/GemClient/GemClient.vcxproj.filters

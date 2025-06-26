@@ -1,9 +1,11 @@
 #include <cbm.h>
+#include <stdbool.h>
 #include <conio.h>
 #include "utils.h"
 
 int main(void)
 {
+    // 1. Set up Screen
     clrscr();
     printxy(0,0,"\x8e"); // font switch to gfx/upper
 
@@ -17,6 +19,14 @@ int main(void)
 #if defined(__C64__)
     //printf("Running on a C64.\n");
 #endif
+
+    // 2. Connect to Server
+
+    // 3. Game Loop
+    while (true)
+    {
+
+    }
 
 	return 0;
 }
