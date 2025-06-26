@@ -18,7 +18,7 @@ namespace GemServer
         // Server to Client (first byte)
         public const byte UPDATE = 128;
 
-        public static readonly TimeSpan UPDATE_PERIOD = TimeSpan.FromMilliseconds(1000);
+        public static readonly TimeSpan UPDATE_PERIOD = TimeSpan.FromMilliseconds(1000);  // Every second
 
         public static void Start()
         {
@@ -45,11 +45,13 @@ namespace GemServer
             TcpClient client = (TcpClient)obj;
             NetworkStream stream = client.GetStream();
 
-            Console.WriteLine("Client connected: [" + client.Client.RemoteEndPoint + "] on thread [" + Environment.CurrentManagedThreadId + "]");
-            Thread.CurrentThread.Name = "Player Thread [" + client.Client.RemoteEndPoint + "]";
+            string id = client.Client.RemoteEndPoint.ToString();
 
-            Player player = new(stream);
-            player.SetPosition (10,10);  // TODO Random
+            Console.WriteLine("Client connected: [" + id + "] on thread [" + Environment.CurrentManagedThreadId + "]");
+            Thread.CurrentThread.Name = "Player Thread [" + id + "]";
+
+            Player player = new(stream, id);
+            player.SetPosition (2,2);  // TODO Random
 
             while (client.Connected)
             {
@@ -76,14 +78,18 @@ namespace GemServer
                 if (delta >= UPDATE_PERIOD)
                 {
                     SendUpdate(player);
+                    player.x++;
+                    player.y++;
                 }
 
                 // Snooze
                 Thread.Sleep(10);  // milliseconds
+
+                if (player.Disconnected) break;
             }
 
             client.Close();
-            Console.WriteLine("Client Disconnected: [" + client.Client.RemoteEndPoint + "]");
+            Console.WriteLine("Client disconnected: [" + player.ID + "]");
         }
 
         private static void ProcessMove(ref Player player, byte command)
@@ -99,9 +105,19 @@ namespace GemServer
             byte[] window_buffer = Maze.GetWindow(player.x, player.y);
             Array.Copy(window_buffer, 0, send_buffer, 1, Maze.MAZE_WINDOW_SIZE);
 
-            player.stream.Write(send_buffer);
+            try
+            {
+                player.stream.Write(send_buffer);
+            }
+                catch (System.IO.IOException io)    // Client disconnected
+            {
+                player.Disconnected = true;
+                return;
+            }
 
             player.LastUpdateTime = DateTime.UtcNow;
+
+            Console.WriteLine("Sent update to " + player.ID + " at " + player.LastUpdateTime.ToString());
         }
     }
 }

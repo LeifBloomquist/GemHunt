@@ -36,3 +36,24 @@ byte read_joystick()
 }
 #endif
 
+void error()
+{
+#if defined(__VIC20__)
+    VIC.bg_border_color = 26;  // red border
+#endif
+
+#if defined(__C64__)
+    VIC.bordercolor = COLOR_RED;
+#endif
+}
+
+void warning()
+{
+#if defined(__VIC20__)
+    VIC.bg_border_color = 31;  // yellow border
+#endif
+
+#if defined(__C64__)
+    VIC.bordercolor = COLOR_YELLOW;
+#endif
+}

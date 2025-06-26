@@ -10,46 +10,6 @@
 unsigned int score;
 //Health
 
-// Prepare the game screen
-void prepare_screen()
-{
-    int i=0;
-
-    clrscr();
-    printxy(0, 0, "\x8e"); // font switch to gfx/upper
-    POKE(0x0291, 0xF0);    // disable font switching   
-
-#if defined(__VIC20__)
-    VIC.bg_border_color = 0x1E;    
-#endif
-
-#if defined(__C64__)   // Mimic VIC20 colours
-    VIC.bgcolor0 = COLOR_WHITE;
-    VIC.bordercolor = COLOR_BLUE;
-#endif
-
-    memset(COLOR_RAM, COLOR_BLACK, SCREEN_WIDTH * SCREEN_HEIGHT);
-    POKE(NETWORK_CHAR_COLOUR, COLOR_RED);
-
-    // Draw the Window Border
-    for (i=0; i < 9; i++)
-    {
-        POKE(WINDOW_START   -  SCREEN_WIDTH + i,  CHAR_BORDER);  // Top
-        POKE(WINDOW_LINE9   +  SCREEN_WIDTH + i,  CHAR_BORDER);  // Bottom
-        POKE(WINDOW_START-1 + (SCREEN_WIDTH * i), CHAR_BORDER);  // Left
-        POKE(WINDOW_START+9 + (SCREEN_WIDTH * i), CHAR_BORDER);  // Right
-    }
-
-    POKE(WINDOW_START - SCREEN_WIDTH - 1, CHAR_DIAGSE);
-    POKE(WINDOW_LINE9 + SCREEN_WIDTH - 1, CHAR_DIAGNE);
-    POKE(WINDOW_LINE9 + SCREEN_WIDTH + 9, CHAR_DIAGSE);
-    POKE(WINDOW_START - SCREEN_WIDTH + 9, CHAR_DIAGNE);
-
-    printxy(1, 1,  "gem hunt multiplayer");
-    printxy(5, 3,  "players: 0");
-    printxy(5, 18, "gems:   0");
-    printxy(5, 20, "health: 100");
-}
 
 // Connect to the server
 void connect_server()
@@ -63,7 +23,8 @@ void connect_server()
     if (result != 0)
     {
         printxy(0, 2, "error!");
-       // while (true) {}
+        error();
+        while (true) {}
     }
 }
 
@@ -89,12 +50,14 @@ void read_input()
 
         if (bytes == -1) // error
         {
-            ; // TODO
+            error();
+            return;
         }
 
         if (bytes != 3)  // not all bytes sent
         {
-            ; // TODO
+            warning();
+            return;  
         }
     }
 }
@@ -106,27 +69,31 @@ void read_network()
 
     POKE(NETWORK_CHAR, CHAR_STATE3);  // Show state
 
-    //bytes = cbm_read(LFN, buffer, BUFFER_SIZE);
+    POKE((int)36879, 28);  // purple
+    bytes = cbm_read(LFN, buffer, BUFFER_SIZE);
+    POKE((int)36879, 30);
 
     if (bytes == 0) // No data
     {
-        //return;  TODO
+        return;
     }
 
     if (bytes == -1) // error
     {
-        ; // TODO
+        error();
+        return;
     }
 
-    if (bytes != 89)  // not all bytes read
+    if (bytes != 82)  // not all bytes read
     {
-        ; // TODO
+        warning();        
+        return;
     }
 
     POKE(NETWORK_CHAR, CHAR_STATE4);  // Show state
 
     // Copy Screen.  No loop for speed (TODO, may need to further optimize with asm)
-    memcpy((void*)WINDOW_START, (const void *)(buffer+01), 9);
+    memcpy((void*)WINDOW_LINE1, (const void *)(buffer+01), 9);
     memcpy((void*)WINDOW_LINE2, (const void *)(buffer+10), 9);
     memcpy((void*)WINDOW_LINE3, (const void *)(buffer+19), 9);
     memcpy((void*)WINDOW_LINE4, (const void *)(buffer+28), 9);

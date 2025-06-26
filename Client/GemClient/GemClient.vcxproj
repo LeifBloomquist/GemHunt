@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\gemhunt.c" />
+    <ClCompile Include="..\screen.c" />
     <ClCompile Include="..\utils.c" />
   </ItemGroup>
   <ItemGroup>

@@ -6,5 +6,5 @@
 #define CMD 15    // The secondary address for the Command channel
 #define BUFFER_SIZE 100
 
-const char addr[] = "tcp://192.168.7.113:6420";
+const char addr[] = "tcp://192.168.7.110:6420";
 static byte buffer[BUFFER_SIZE];

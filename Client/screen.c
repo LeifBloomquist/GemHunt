@@ -1,0 +1,61 @@
+#include <cbm.h>
+#include <peekpoke.h>
+#include <conio.h>
+#include <string.h>
+#include "utils.h"
+#include "screen.h"
+
+// Prepare the game screen
+void prepare_screen()
+{
+    int i=0;
+
+    clrscr();
+    printxy(0, 0, "\x8e"); // font switch to gfx/upper
+    POKE(0x0291, 0xF0);    // disable font switching   
+
+#if defined(__VIC20__)
+    VIC.bg_border_color = 0x1E;    
+#endif
+
+#if defined(__C64__)   // Mimic VIC20 colours
+    VIC.bgcolor0 = COLOR_WHITE;
+    VIC.bordercolor = COLOR_BLUE;
+#endif
+
+    // Default character colours
+    memset(COLOR_RAM, COLOR_BLUE, SCREEN_WIDTH * SCREEN_HEIGHT);
+
+    // Network Activity
+    POKE(NETWORK_CHAR_COLOUR, COLOR_RED);
+
+    // Window
+    memset((void *)(WINDOW_LINE1 + COLOR_OFFSET), COLOR_BLACK, 9);
+    memset((void *)(WINDOW_LINE2 + COLOR_OFFSET), COLOR_BLACK, 9);
+    memset((void *)(WINDOW_LINE3 + COLOR_OFFSET), COLOR_BLACK, 9);
+    memset((void *)(WINDOW_LINE4 + COLOR_OFFSET), COLOR_BLACK, 9);
+    memset((void *)(WINDOW_LINE5 + COLOR_OFFSET), COLOR_BLACK, 9);
+    memset((void *)(WINDOW_LINE6 + COLOR_OFFSET), COLOR_BLACK, 9);
+    memset((void *)(WINDOW_LINE7 + COLOR_OFFSET), COLOR_BLACK, 9);
+    memset((void *)(WINDOW_LINE8 + COLOR_OFFSET), COLOR_BLACK, 9);
+    memset((void *)(WINDOW_LINE9 + COLOR_OFFSET), COLOR_BLACK, 9);
+
+    // Draw the Window Border
+    for (i=0; i < 9; i++)
+    {
+        POKE(WINDOW_LINE1   -  SCREEN_WIDTH + i,  CHAR_BORDER);  // Top
+        POKE(WINDOW_LINE9   +  SCREEN_WIDTH + i,  CHAR_BORDER);  // Bottom
+        POKE(WINDOW_LINE1-1 + (SCREEN_WIDTH * i), CHAR_BORDER);  // Left
+        POKE(WINDOW_LINE1+9 + (SCREEN_WIDTH * i), CHAR_BORDER);  // Right
+    }
+
+    POKE(WINDOW_LINE1 - SCREEN_WIDTH - 1, CHAR_DIAGSE);
+    POKE(WINDOW_LINE9 + SCREEN_WIDTH - 1, CHAR_DIAGNE);
+    POKE(WINDOW_LINE9 + SCREEN_WIDTH + 9, CHAR_DIAGSE);
+    POKE(WINDOW_LINE1 - SCREEN_WIDTH + 9, CHAR_DIAGNE);
+
+    printxy(1, 1,  "gem hunt multiplayer");
+    printxy(5, 3,  "players: 0");
+    printxy(5, 18, "gems:   0");
+    printxy(5, 20, "health: 100");
+}
