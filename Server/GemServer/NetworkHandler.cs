@@ -22,7 +22,7 @@ namespace GemServer
 
         public static void Start()
         {
-            TcpListener listener = new(IPAddress.Any, 8000);
+            TcpListener listener = new(IPAddress.Any, 6420);
             TcpClient client;
             listener.Start();
 
