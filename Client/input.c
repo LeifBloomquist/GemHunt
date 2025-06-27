@@ -30,15 +30,15 @@ int read_keyboard()
 
     switch (c)
     {
-        case 'q': return 1;
-        case 'w': return 2;
-        case 'e': return 3;
-        case 'a': return 4;
-        case 's': return 7;
-        case 'd': return 5;
+        case 'q': return 8;
+        case 'w': return 1;
+        case 'e': return 2;
+        case 'a': return 7;
+        case 's': return 5;
+        case 'd': return 3;
         case 'z': return 6;
-        case 'x': return 7;
-        case 'c': return 8;
+        case 'x': return 5;
+        case 'c': return 4;
         case ' ': return 16;
         default:  return 0;
     }

@@ -51,7 +51,8 @@ namespace GemServer
             Thread.CurrentThread.Name = "Player Thread [" + id + "]";
 
             Player player = new(stream, id);
-            player.SetPosition(10, 10);
+            var (x, y) = Maze.FindRandomEmptySpace(0); // Surrounded by empty space
+            player.SetPosition(x, y);
 
             while (client.Connected)
             {
@@ -79,7 +80,7 @@ namespace GemServer
                 TimeSpan delta = DateTime.UtcNow - player.LastUpdateTime;
                 if (delta >= UPDATE_PERIOD)
                 {
-                    //SendUpdate(player);
+                    SendUpdate(player);
                 }
 
                 // Snooze
@@ -95,20 +96,25 @@ namespace GemServer
 
         private static void ProcessMove(ref Player player, byte move, byte action)
         {
+            int temp_x = player.x;
+            int temp_y = player.y;
+
             switch (move)
             {
-                case 1: player.y--; player.x--; break;
-                case 2:             player.x--; break;
-                case 3: player.y++; player.x--; break;
-                case 4: player.y--;             break;
-                case 5: player.y++;             break;
-                case 6: player.y--; player.x++; break;
-                case 7:             player.x++; break;
-                case 8: player.y++; player.x++; break;
+                case Constants.DIRECTION_NW:    temp_y--; temp_x--; break;
+                case Constants.DIRECTION_NORTH:           temp_x--; break;
+                case Constants.DIRECTION_NE:    temp_y++; temp_x--; break;
+                case Constants.DIRECTION_WEST:  temp_y--;           break;
+                case Constants.DIRECTION_EAST:  temp_y++;           break;
+                case Constants.DIRECTION_SW:    temp_y--; temp_x++; break;
+                case Constants.DIRECTION_SOUTH: temp_x++;           break;
+                case Constants.DIRECTION_SE:    temp_y++; temp_x++; break;
                 default:
                     Console.WriteLine("Unknown player move " + move);
                     return;
             }
+            player.x = temp_x;
+            player.y = temp_y;
 
             // Bound
             if (player.x < 0) player.x = 0;

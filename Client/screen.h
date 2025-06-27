@@ -43,8 +43,6 @@
 #define HEALTH_START  0x400
 #endif
 
-
-
 #define CHAR_STATE1 126 // top-left
 #define CHAR_STATE2 124 // top-right
 #define CHAR_STATE3 108 // bottom-right

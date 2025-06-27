@@ -68,7 +68,7 @@
             return window;
         }
 
-        public static uint GetNeighboringWallCount(uint center_x, uint center_y)
+        public static uint GetNeighboringWallCount(int center_x, int center_y)
         {
             uint count = 0;
 
@@ -101,14 +101,14 @@
             return PlaceItem(Characters.GEM, count, 4);   // Gems must be in a corner
         }
 
-        private static bool PlaceItem(byte character, uint count, uint spaces_required)
+        private static bool PlaceItem(byte character, uint count, uint walls_required)
         {
             for (int i = 0; i < count; i++)
             {
                 while (true)  // TODO, put an upper limit
                 {
-                    uint item_x = (uint)Globals.random.NextInt64(MAZE_SIZE);
-                    uint item_y = (uint)Globals.random.NextInt64(MAZE_SIZE);
+                    int item_x = (int)Globals.random.NextInt64(MAZE_SIZE);
+                    int item_y = (int)Globals.random.NextInt64(MAZE_SIZE);
 
                     // Only on empty cells
                     if (MazeCells[item_x,item_y] != Characters.EMPTY)
@@ -116,7 +116,7 @@
                         continue;
                     }
                    
-                    if (GetNeighboringWallCount(item_x, item_y) == spaces_required)
+                    if (GetNeighboringWallCount(item_x, item_y) == walls_required)
                     {
                         MazeCells[item_x, item_y] = character;
                         break;
@@ -125,6 +125,26 @@
             }
 
             return true;
+        }
+
+        public static (int x, int y) FindRandomEmptySpace(uint walls_required)
+        {
+            while (true)  // TODO, put an upper limit
+            {
+                int item_x = (int)Globals.random.NextInt64(MAZE_SIZE);
+                int item_y = (int)Globals.random.NextInt64(MAZE_SIZE);
+
+                // Only on empty cells
+                if (MazeCells[item_x, item_y] != Characters.EMPTY)
+                {
+                    continue;
+                }
+
+                if (GetNeighboringWallCount(item_x, item_y) == walls_required)
+                {
+                    return (item_x, item_y);
+                }
+            }
         }
     }
 }
