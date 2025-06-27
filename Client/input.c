@@ -50,8 +50,6 @@ void read_input()
     int bytes = 0;
     byte m = 0;
 
-    POKE(NETWORK_CHAR, CHAR_STATE1);  // Show state
-
     m = read_keyboard();
 
     if (m == 0)
@@ -69,8 +67,6 @@ void read_input()
         send_buffer[0] = PACKET_MOVE;
         send_buffer[1] = m;
         send_buffer[2] = m;
-
-        POKE(NETWORK_CHAR, CHAR_STATE2);  // Show state
 
         bytes = cbm_write(LFN, send_buffer, SEND_BUFFER_SIZE);
 

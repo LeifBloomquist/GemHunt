@@ -8,7 +8,7 @@
 #define SAN 2     // The secondary address (SA) to use on DEV.
 #define CMD 15    // The secondary address for the Command channel
 #define BUFFER_SIZE 100
-#define PACKET_SIZE 88
+#define PACKET_SIZE 94
 #define SEND_BUFFER_SIZE 4
 
 #define PACKET_MOVE   1

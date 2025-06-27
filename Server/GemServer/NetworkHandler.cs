@@ -79,7 +79,7 @@ namespace GemServer
                 TimeSpan delta = DateTime.UtcNow - player.LastUpdateTime;
                 if (delta >= UPDATE_PERIOD)
                 {
-                    SendUpdate(player);
+                    //SendUpdate(player);
                 }
 
                 // Snooze
@@ -107,7 +107,7 @@ namespace GemServer
                 case 8: player.y++; player.x++; break;
                 default:
                     Console.WriteLine("Unknown player move " + move);
-                    break;
+                    return;
             }
 
             // Bound

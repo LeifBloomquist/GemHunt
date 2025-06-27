@@ -6,6 +6,8 @@
 #include "screen.h"
 
 static byte buffer[BUFFER_SIZE];
+static byte state_index = 0;
+static byte state_chars[4] = { CHAR_STATE1, CHAR_STATE2, CHAR_STATE3, CHAR_STATE4 };
 
 // Connect to the server
 void connect_server()
@@ -29,8 +31,6 @@ void read_network()
 {
     int bytes = 0;
 
-    POKE(NETWORK_CHAR, CHAR_STATE3);  // Show state
-
     POKE(0x900F, 28);  // purple debug
     bytes = cbm_read(LFN, buffer, BUFFER_SIZE);
     POKE(0x900F, 30);  // blue
@@ -52,9 +52,11 @@ void read_network()
         // return;
     }
 
-    POKE(NETWORK_CHAR, CHAR_STATE4);  // Show state
-
     // Update Screen elements
+
+    // Animate network activity
+    POKE(NETWORK_CHAR, state_chars[state_index++]);
+    if (state_index >= 4) state_index = 0;
 
     // Copy Screen.  No loop for speed
     memcpy((void*)WINDOW_LINE1, (const void*)(buffer + 01), 9);
