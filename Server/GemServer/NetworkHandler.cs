@@ -5,6 +5,8 @@ namespace GemServer
 {
     static internal class NetworkHandler
     {
+        private const int PORT = 6420;
+
         // Client to Server
         public const byte PACKET_MOVED = 1;
 
@@ -20,9 +22,9 @@ namespace GemServer
 
         public static readonly TimeSpan UPDATE_PERIOD = TimeSpan.FromMilliseconds(1000);  // Every second
 
-        public static void Start()
+        public static void StartTCP()
         {
-            TcpListener listener = new(IPAddress.Any, 6420);
+            TcpListener listener = new(IPAddress.Any, PORT);
             TcpClient client;
             listener.Start();
 
@@ -32,11 +34,11 @@ namespace GemServer
             while (true)
             {
                 client = listener.AcceptTcpClient(); // Blocks
-                _ = ThreadPool.QueueUserWorkItem(ThreadProc, client);
+                _ = ThreadPool.QueueUserWorkItem(ThreadProcTCP, client);
             }
         }
 
-        private static void ThreadProc(object? obj)
+        private static void ThreadProcTCP(object? obj)
         {
             if (obj == null) return;           
 

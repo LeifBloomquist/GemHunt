@@ -20,7 +20,7 @@
             Maze.SaveFile(@"C:\mazes\");  // For debug
 
             Console.WriteLine("Starting Server");
-            NetworkHandler.Start();
+            NetworkHandler.StartTCP();
 
             return 0;
         }
