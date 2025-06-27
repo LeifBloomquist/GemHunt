@@ -11,8 +11,6 @@ void prepare_screen()
     int i=0;
 
     clrscr();
-    printxy(0, 0, "\x8e"); // font switch to gfx/upper
-    POKE(0x0291, 0xF0);    // disable font switching   
 
 #if defined(__VIC20__)
     VIC.bg_border_color = 0x1E;    

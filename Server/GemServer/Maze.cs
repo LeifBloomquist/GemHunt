@@ -18,7 +18,7 @@
             {
                 for (int y = 0; y < MAZE_SIZE; y++)
                 {
-                    MazeCells[x, y] = Characters.ASCIItoScreenCode(file[x][y]);
+                    MazeCells[x, y] = Characters.ASCIItoScreenCode(file[y][x]);
                 }
             }
 
@@ -29,17 +29,15 @@
         {
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(path, "maze_output.txt")))
             {
-                for (int x = 0; x < MAZE_SIZE; x++)
+                for (int y = 0; y < MAZE_SIZE; y++)
                 {
-                    for (int y = 0; y < MAZE_SIZE; y++)
+                    for (int x = 0; x < MAZE_SIZE; x++)
                     {
                         outputFile.Write(Characters.ScreenCodeToASCII(MazeCells[x, y]));
                     }
                     outputFile.WriteLine();
                 }
             }
-
-            
 
             return true;
         }
@@ -59,7 +57,7 @@
                     }
                     else
                     {
-                        window[offset++] = MazeCells[x, y];
+                        window[offset++] = MazeCells[y, x];
                     }
                 }
             }
@@ -97,7 +95,7 @@
 
         public static bool PlaceGems(uint count)
         {
-            return PlaceItem(Characters.GEM, count, 5);   // Gems must be in a corner
+            return PlaceItem(Characters.GEM, count, 4);   // Gems must be in a corner
         }
 
         private static bool PlaceItem(byte character, uint count, uint spaces_required)
@@ -108,6 +106,12 @@
                 {
                     uint item_x = (uint)Globals.random.NextInt64(MAZE_SIZE);
                     uint item_y = (uint)Globals.random.NextInt64(MAZE_SIZE);
+
+                    // Only on empty cells
+                    if (MazeCells[item_x,item_y] != Characters.EMPTY)
+                    {
+                        continue;
+                    }
                    
                     if (GetNeighboringWallCount(item_x, item_y) == spaces_required)
                     {

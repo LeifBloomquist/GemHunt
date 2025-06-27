@@ -31,7 +31,7 @@ int read_keyboard()
         case 'x': return 7;
         case 'c': return 8;
         case ' ': return 16;
-        default: return 0;
+        default:  return 0;
     }
 }
 
@@ -58,12 +58,12 @@ void read_input()
     if (m != 0)
     {
         send_buffer[0] = PACKET_MOVE;
-        send_buffer[1] = (m & 0x0F);
-        send_buffer[2] = (m & 0x10);
+        send_buffer[1] = m;
+        send_buffer[2] = m;
 
         POKE(NETWORK_CHAR, CHAR_STATE2);  // Show state
 
-        bytes = cbm_write(LFN, send_buffer, 3);
+        bytes = cbm_write(LFN, send_buffer, SEND_BUFFER_SIZE);
 
         if (bytes == -1) // error
         {

@@ -96,18 +96,24 @@ namespace GemServer
         {
             switch (move)
             {
-                case 1: player.x--; player.y--; break;
-                case 2:             player.y--; break;
-                case 3: player.x++; player.y--; break;
-                case 4: player.x--;             break;
-                case 5: player.x++;             break;
-                case 6: player.x--; player.y++; break;
-                case 7:             player.y++; break;
-                case 8: player.x++; player.y++; break;
+                case 1: player.y--; player.x--; break;
+                case 2:             player.x--; break;
+                case 3: player.y++; player.x--; break;
+                case 4: player.y--;             break;
+                case 5: player.y++;             break;
+                case 6: player.y--; player.x++; break;
+                case 7:             player.x++; break;
+                case 8: player.y++; player.x++; break;
                 default:
                     Console.WriteLine("Unknown player move " + move);
                     break;
             }
+
+            // Bound
+            if (player.x < 0) player.x = 0;
+            if (player.y < 0) player.y = 0;
+            if (player.x >= Maze.MAZE_SIZE) player.x = Maze.MAZE_SIZE-1;
+            if (player.y >= Maze.MAZE_SIZE) player.y = Maze.MAZE_SIZE-1;
 
             player.LastMoveTime = DateTime.Now;
             SendUpdate(player);  // For immediate feedback
