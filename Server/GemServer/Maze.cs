@@ -62,6 +62,9 @@
                 }
             }
 
+            // Always show the player
+            window[40] = Characters.PLAYER;
+
             return window;
         }
 

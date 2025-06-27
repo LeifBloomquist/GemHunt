@@ -8,10 +8,13 @@
 #define SAN 2     // The secondary address (SA) to use on DEV.
 #define CMD 15    // The secondary address for the Command channel
 #define BUFFER_SIZE 100
+#define PACKET_SIZE 88
 #define SEND_BUFFER_SIZE 4
 
 #define PACKET_MOVE   1
 #define PACKET_UPDATE 128
+
+#define SERVER_ADDRESS "tcp://192.168.7.110:6420"
 
 void connect_server();
 void read_network();

@@ -7,10 +7,6 @@
 #include "input.h"
 #include "network.h"
 
-// Other game parameters
-unsigned int score;
-//Health
-
 void initialize(void)
 {
     printxy(0, 0, "\x8e"); // font switch to gfx/upper

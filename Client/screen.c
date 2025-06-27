@@ -38,6 +38,9 @@ void prepare_screen()
     memset((void *)(WINDOW_LINE8 + COLOR_OFFSET), COLOR_BLACK, 9);
     memset((void *)(WINDOW_LINE9 + COLOR_OFFSET), COLOR_BLACK, 9);
 
+    // Player char color
+    POKE(WINDOW_LINE5 + 4 + COLOR_OFFSET, COLOR_RED);
+
     // Draw the Window Border
     for (i=0; i < 9; i++)
     {
@@ -47,13 +50,15 @@ void prepare_screen()
         POKE(WINDOW_LINE1+9 + (SCREEN_WIDTH * i), CHAR_BORDER);  // Right
     }
 
+    // Corners
     POKE(WINDOW_LINE1 - SCREEN_WIDTH - 1, CHAR_DIAGSE);
     POKE(WINDOW_LINE9 + SCREEN_WIDTH - 1, CHAR_DIAGNE);
     POKE(WINDOW_LINE9 + SCREEN_WIDTH + 9, CHAR_DIAGSE);
     POKE(WINDOW_LINE1 - SCREEN_WIDTH + 9, CHAR_DIAGNE);
 
+    // Text
     printxy(1, 1,  "gem hunt multiplayer");
-    printxy(5, 3,  "players: 0");
-    printxy(5, 18, "gems:   0");
-    printxy(5, 20, "health: 100");
+    printxy(5, 3,  "players:---");
+    printxy(5, 18, "gems:   ---");
+    printxy(5, 20, "health: ---");
 }

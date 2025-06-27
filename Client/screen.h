@@ -17,7 +17,10 @@
 #define NETWORK_CHAR_COLOUR 0x97F9
 #define SCREEN_WIDTH  22
 #define SCREEN_HEIGHT 23
-#define COLOR_OFFSET (COLOR_RAM-0x1E00)
+#define COLOR_OFFSET  (COLOR_RAM-0x1E00)
+#define PLAYERS_START 0x1E4F
+#define GEMS_START    0x1F99
+#define HEALTH_START  GEMS_START+44
 #endif
 
 #if defined(__C64__)
@@ -35,6 +38,9 @@
 #define SCREEN_WIDTH  40
 #define SCREEN_HEIGHT 25
 #define COLOR_OFFSET (COLOR_RAM-0x0400)
+#define PLAYERS_START 0x400  // TODO, fix
+#define GEMS_START    0x400
+#define HEALTH_START  0x400
 #endif
 
 

@@ -6,6 +6,9 @@ namespace GemServer
     static internal class NetworkHandler
     {
         private const int PORT = 6420;
+        private const int SEND_BUFFER_SIZE=94;
+
+        private static uint player_count = 0;
 
         // Client to Server
         public const byte PACKET_MOVED = 1;
@@ -33,7 +36,9 @@ namespace GemServer
 
         private static void ThreadProcTCP(object? obj)
         {
-            if (obj == null) return;           
+            if (obj == null) return;
+
+            player_count++;
 
             byte[] buffer = new byte[10];
 
@@ -84,6 +89,7 @@ namespace GemServer
             }
 
             client.Close();
+            player_count--;
             Console.WriteLine("Client disconnected: [" + player.ID + "]");
         }
 
@@ -116,11 +122,27 @@ namespace GemServer
 
         private static void SendUpdate(Player player)
         {
-            byte[] send_buffer = new byte[Maze.MAZE_WINDOW_SIZE + 1];
+            byte[] send_buffer = new byte[SEND_BUFFER_SIZE];
 
+            // Packet Type
             send_buffer[0] = UPDATE;
+
+            // Screen update
             byte[] window_buffer = Maze.GetWindow(player.x, player.y);
             Array.Copy(window_buffer, 0, send_buffer, 1, Maze.MAZE_WINDOW_SIZE);
+
+            // Statistics
+            send_buffer[83] = (byte)' ';   // Score
+            send_buffer[84] = (byte)'1';   
+            send_buffer[85] = (byte)'2';
+            send_buffer[86] = (byte)'1';   // Health
+            send_buffer[87] = (byte)'2';
+            send_buffer[88] = (byte)'3';
+            send_buffer[89] = (byte)' ';   // Players
+            send_buffer[90] = (byte)' ';
+            send_buffer[91] = (byte)(48+player_count);
+            send_buffer[92] = 0;           // Sounds
+            send_buffer[93] = 0;
 
             try
             {

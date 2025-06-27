@@ -20,6 +20,14 @@ int read_keyboard()
 
     if (c == 0) return 0;
 
+    // Debug Hack - reconnect to server
+    if (c == CH_F7)
+    {
+        cbm_close(LFN);
+        cbm_open(LFN, DEV, SAN, SERVER_ADDRESS);
+        return 0;
+    }
+
     switch (c)
     {
         case 'q': return 1;
