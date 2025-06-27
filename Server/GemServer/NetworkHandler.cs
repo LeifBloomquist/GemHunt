@@ -10,13 +10,6 @@ namespace GemServer
         // Client to Server
         public const byte PACKET_MOVED = 1;
 
-        // Possible Moves
-        public const byte UP = 1;
-        public const byte DOWN = 2;
-        public const byte LEFT = 3;
-        public const byte RIGHT = 4;
-        public const byte ACTION = 5;
-
         // Server to Client (first byte)
         public const byte UPDATE = 128;
 

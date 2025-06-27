@@ -5,8 +5,8 @@ namespace GemServer
     internal class Player
     {
         public NetworkStream stream { get; set; }
-        public uint x { get; set; }
-        public uint y { get; set; }
+        public int x { get; set; }
+        public int y { get; set; }
 
         public DateTime LastUpdateTime { get; set; }
         public DateTime LastMoveTime { get; set; }
@@ -21,7 +21,7 @@ namespace GemServer
             ID = _ID;
         }
 
-        public void SetPosition(uint _x, uint _y)
+        public void SetPosition(int _x, int _y)
         {
            x = _x;
            y = _y;

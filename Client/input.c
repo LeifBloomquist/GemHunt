@@ -26,6 +26,7 @@ int read_keyboard()
         case 'w': return 2;
         case 'e': return 3;
         case 'a': return 4;
+        case 's': return 7;
         case 'd': return 5;
         case 'z': return 6;
         case 'x': return 7;

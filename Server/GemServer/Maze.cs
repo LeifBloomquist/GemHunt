@@ -2,11 +2,11 @@
 {
     internal class Maze
     {
-        public const uint MAZE_SIZE = 100;
-        public const uint MAZE_WINDOW_SIZE = 9 * 9;
-        public const uint MAZE_WINDOW_EDGES = 4;
+        public const int MAZE_SIZE = 100;
+        public const int MAZE_WINDOW_SIZE = 9 * 9;
+        public const int MAZE_WINDOW_EDGES = 4;
 
-        public const uint WALLCOUNT_MAX = 999;  // Nonsense value for error
+        public const int WALLCOUNT_MAX = 999;  // Nonsense value for error
 
         private static byte[,] MazeCells = new byte[MAZE_SIZE, MAZE_SIZE];
 
@@ -42,7 +42,7 @@
             return true;
         }
 
-        public static byte[] GetWindow(uint center_x, uint center_y)
+        public static byte[] GetWindow(int center_x, int center_y)
         {
             int offset = 0;
             byte[] window = new byte[MAZE_WINDOW_SIZE];
