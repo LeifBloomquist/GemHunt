@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Drawing;
+using System.Net;
 using System.Net.Sockets;
 
 namespace GemServer
@@ -8,7 +9,7 @@ namespace GemServer
         private const int PORT = 6420;
         private const int SEND_BUFFER_SIZE=94;
 
-        private static uint player_count = 0;
+        private static int player_count = 0;
 
         // Client to Server
         public const byte PACKET_MOVED = 1;
@@ -52,7 +53,7 @@ namespace GemServer
 
             Player player = new(stream, id);
             var (x, y) = Maze.FindRandomEmptySpace(0); // Surrounded by empty space
-            player.SetPosition(x, y);
+            player.SetPosition(y, x);
 
             while (client.Connected)
             {
@@ -101,26 +102,50 @@ namespace GemServer
 
             switch (move)
             {
-                case Constants.DIRECTION_NW:    temp_y--; temp_x--; break;
-                case Constants.DIRECTION_NORTH:           temp_x--; break;
-                case Constants.DIRECTION_NE:    temp_y++; temp_x--; break;
-                case Constants.DIRECTION_WEST:  temp_y--;           break;
-                case Constants.DIRECTION_EAST:  temp_y++;           break;
-                case Constants.DIRECTION_SW:    temp_y--; temp_x++; break;
-                case Constants.DIRECTION_SOUTH: temp_x++;           break;
-                case Constants.DIRECTION_SE:    temp_y++; temp_x++; break;
+                case Globals.DIRECTION_NW:    temp_y--; temp_x--; break;
+                case Globals.DIRECTION_NORTH:           temp_x--; break;
+                case Globals.DIRECTION_NE:    temp_y++; temp_x--; break;
+                case Globals.DIRECTION_WEST:  temp_y--;           break;
+                case Globals.DIRECTION_EAST:  temp_y++;           break;
+                case Globals.DIRECTION_SW:    temp_y--; temp_x++; break;
+                case Globals.DIRECTION_SOUTH: temp_x++;           break;
+                case Globals.DIRECTION_SE:    temp_y++; temp_x++; break;
                 default:
                     Console.WriteLine("Unknown player move " + move);
                     return;
             }
+
+            // Bound
+            if (temp_x < 0) temp_x = 0;
+            if (temp_y < 0) temp_y = 0;
+            if (temp_x >= Maze.MAZE_SIZE) temp_x = Maze.MAZE_SIZE-1;
+            if (temp_y >= Maze.MAZE_SIZE) temp_y = Maze.MAZE_SIZE-1;
+
+            // Move allowed?
+            if (!Maze.CanEnterCell(temp_y,temp_x))
+            {
+                return;
+            }
+
+            // Move was OK
             player.x = temp_x;
             player.y = temp_y;
 
-            // Bound
-            if (player.x < 0) player.x = 0;
-            if (player.y < 0) player.y = 0;
-            if (player.x >= Maze.MAZE_SIZE) player.x = Maze.MAZE_SIZE-1;
-            if (player.y >= Maze.MAZE_SIZE) player.y = Maze.MAZE_SIZE-1;
+            // Any points?
+            int points = Maze.ScorePoints(temp_y, temp_x);
+            if (points > 0)
+            {
+                player.score += points;
+                // TODO sound
+            }
+
+            // Any ill effects?
+            int damage = Maze.TakeDamage(temp_y, temp_x);
+            if (damage > 0)
+            {
+                player.health -= damage;
+                // TODO sound
+            }
 
             player.LastMoveTime = DateTime.Now;
             SendUpdate(player);  // For immediate feedback
@@ -138,15 +163,15 @@ namespace GemServer
             Array.Copy(window_buffer, 0, send_buffer, 1, Maze.MAZE_WINDOW_SIZE);
 
             // Statistics
-            send_buffer[83] = (byte)' ';   // Score
-            send_buffer[84] = (byte)'1';   
-            send_buffer[85] = (byte)'2';
-            send_buffer[86] = (byte)'1';   // Health
-            send_buffer[87] = (byte)'2';
-            send_buffer[88] = (byte)'3';
-            send_buffer[89] = (byte)' ';   // Players
-            send_buffer[90] = (byte)' ';
-            send_buffer[91] = (byte)(48+player_count);
+            send_buffer[83] = Int2Char(player.score, 0);
+            send_buffer[84] = Int2Char(player.score, 1);
+            send_buffer[85] = Int2Char(player.score, 2);
+            send_buffer[86] = Int2Char(player.health, 0);
+            send_buffer[87] = Int2Char(player.health, 1);
+            send_buffer[88] = Int2Char(player.health, 2);
+            send_buffer[89] = Int2Char(player_count, 0);
+            send_buffer[90] = Int2Char(player_count, 1);
+            send_buffer[91] = Int2Char(player_count, 2);
             send_buffer[92] = 0;           // Sounds
             send_buffer[93] = 0;
 
@@ -163,6 +188,12 @@ namespace GemServer
             player.LastUpdateTime = DateTime.UtcNow;
 
             Console.WriteLine("Sent update to " + player.ID + " at " + player.LastUpdateTime.ToString());
+        }
+
+        private static byte Int2Char(int value, int position)
+        {
+            string myString = value.ToString().PadLeft(3, ' ');
+            return (byte)myString[position];
         }
     }
 }

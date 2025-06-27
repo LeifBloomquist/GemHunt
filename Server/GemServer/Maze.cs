@@ -146,5 +146,36 @@
                 }
             }
         }
+
+        internal static bool CanEnterCell(int temp_y, int temp_x)
+        {
+            switch (MazeCells[temp_y,temp_x])
+            {
+                case Characters.EMPTY: return true;
+                case Characters.TRAP : return true;
+                case Characters.SMOKE: return true;
+                case Characters.GEM:   return true;
+                default: return false;
+            }
+        }
+
+        internal static int TakeDamage(int temp_y, int temp_x)
+        {
+            switch (MazeCells[temp_y, temp_x])
+            {
+                case Characters.TRAP: return 10;
+                case Characters.SMOKE: return 1;
+                default: return 0;
+            }
+        }
+
+        internal static int ScorePoints(int temp_y, int temp_x)
+        {
+            switch (MazeCells[temp_y, temp_x])
+            {
+                case Characters.GEM: return 1;   // In future, some with different point values?
+                default: return 0;
+            }
+        }
     }
 }

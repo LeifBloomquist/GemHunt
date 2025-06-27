@@ -8,6 +8,9 @@ namespace GemServer
         public int x { get; set; }
         public int y { get; set; }
 
+        public int health { get; set; } = 100;
+        public int score { get; set; }
+
         public DateTime LastUpdateTime { get; set; }
         public DateTime LastMoveTime { get; set; }
 
